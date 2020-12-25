@@ -1,5 +1,6 @@
 import * as React from "react";
 import axios from "axios";
+import { useRef } from "react";
 //import "./styles.css";
 
 const { useEffect, useState } = React;
@@ -44,11 +45,14 @@ export default function App() {
   const [userInfos, setUserInfos] = useState([]);
   const [randomeUserDataJSON, setRandomUserDataJSON] = useState(" ");
 
-  const fetchNextYear = () => {
+  const fetchNextUser = useRef(() => {});
+
+  fetchNextUser.current = () => {
     fetchRandomData(nextPageNumber).then((randomData) => {
       // setRandomUserDataJSON(
       //   JSON.stringify(randomData, null, 2) || "No user Data Found"
       // );
+      if (randomData === undefined) return;
       const newUserInfos = [...userInfos, ...randomData.results];
       setUserInfos(newUserInfos);
       setNextPageNumber(randomData.info.page + 1);
@@ -56,7 +60,7 @@ export default function App() {
   };
 
   useEffect(() => {
-    
+    fetchNextUser.current();
   }, []);
 
   return (
@@ -74,8 +78,7 @@ export default function App() {
       </button>
       <button
         onClick={() => {
-          setCounter(counter + 1);
-          console.log("f00");
+          fetchNextUser.current();
         }}
       >
         Fetch Next User
@@ -88,7 +91,7 @@ export default function App() {
         </div>
       ))}
 
-      <pre>{randomeUserDataJSON}</pre>
+      {/* <pre>{randomeUserDataJSON}</pre> */}
     </div>
   );
 }
