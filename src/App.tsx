@@ -56,13 +56,7 @@ export default function App() {
   };
 
   useEffect(() => {
-    fetchRandomData(nextPageNumber).then((randomData) => {
-      setRandomUserDataJSON(
-        JSON.stringify(randomData, null, 2) || "No user Data Found"
-      );
-      setUserInfos(randomData.results);
-      setNextPageNumber(randomData.info.page + 1);
-    });
+    
   }, []);
 
   return (
